@@ -7,6 +7,11 @@ The app is a simple physics puzzle game, built for **Android** using **Corona SD
 You guide a ball to the goal in each level by timing its launch and tweaking the level, without directly controlling the ball.
 The game contains 20 levels to play.
 
+## Installation
+[**Download APK**](https://github.com/NotWoods/bit-ball/releases/download/1.2/Bit_Ball.apk)  
+
+[How to sideload APKs on Android](http://www.howtogeek.com/howto/41082/install-non-market-apps-on-your-android-device/)
+
 ## Screenshots
 
 <img src="promo/screenshot1.jpg" width="170">
