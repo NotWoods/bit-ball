@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>How to play Bit Ball</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Press Start 2P', 'Arcade Classic', sans-serif;
+        background: black;
+        color: white;
+        margin: 0;
+        display: grid;
+        height: 100vh;
+        grid-template-areas:
+          'header'
+          'slider';
+        grid-template-rows: min-content 1fr;
+      }
+
+      .header {
+        grid-area: header;
+      }
+
+      .slider {
+        scroll-snap-type: x mandatory;
+        overflow-x: scroll;
+        display: flex;
+        grid-area: slider;
+      }
+
+      .howto {
+        scroll-snap-align: center;
+        height: 100%;
+        background: black;
+      }
+
+      .howto img {
+        object-fit: contain;
+        height: 100%;
+        width: 100vw;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <a href="../">Back</a>
+      <h1>How to play Bit Ball</h1>
+    </header>
+    <div class="slider">
+      <div class="howto">
+        <img src="info1.png" alt="Press the round button to drop a ball" width="380" height="570">
+      </div>
+      <div class="howto">
+        <img src="info2.png" alt="Try to get the ball in the goal" width="380" height="570">
+      </div>
+      <div class="howto">
+        <img src="info3.png" alt="Grey platforms rotate by themselves, you can control green platforms, white platforms have no special effect, yellow platforms are bouncy" width="380" height="570">
+      </div>
+      <div class="howto">
+        <img src="info4.png" alt="Cannons will shoot your ball once it is inside" width="380" height="570">
+      </div>
+    </div>
+  </body>
+</html>
