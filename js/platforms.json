@@ -1,0 +1,53 @@
+{
+  "ball": {
+    "type": "dynamic",
+    "image": "ball.png",
+    "density": 0.1,
+    "friction": 0.3,
+    "bounce": 0.2,
+    "radius": 17
+  },
+  "goal": {
+    "type": "static",
+    "image": "goal.png",
+    "density": 1.0,
+    "friction": 0.3,
+    "bounce": 0.2
+  },
+  "rotater": {
+    "type": "dynamic",
+    "image": "platform_gray.png",
+    "friction": 1.0,
+    "bounce": 0.2,
+    "angularDamping": 5,
+    "motorSpeed": 50,
+    "maxMotorTorque": 100000,
+    "shape": [-82,-5, 82,-5, 82,6, -82,6]
+  },
+  "rotater_small": {
+    "type": "dynamic",
+    "image": "platform_gray_small.png",
+    "friction": 1.0,
+    "bounce": 0.2,
+    "angularDamping": 5,
+    "motorSpeed": 50,
+    "maxMotorTorque": 100000,
+    "shape": [-38,-5, 38,-5, 38,4, -38,4]
+  },
+  "touch": {
+    "type": "kinematic",
+    "image": "platform_green_small.png",
+    "density": 1.0,
+    "friction": 0.3,
+    "bounce": 0.2,
+    "shape": [-38,-5, 38,-5, 38,4, -38,4]
+  },
+  "trampoline": {
+    "type": "static",
+    "image": "platform_yellow_small.png",
+    "density": 1.0,
+    "friction": 0.3,
+    "bounce": 0.7,
+    "shape": [-38,-5, 38,-5, 38,4, -38,4]
+  }
+}

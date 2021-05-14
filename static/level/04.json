@@ -1,0 +1,24 @@
+{
+  "spawn": {
+    "x": 20,
+    "y": -80
+  },
+  "goal": {
+    "x": 270,
+    "y": 400
+  },
+  "platforms": [
+    {
+      "type": "trampoline",
+      "x": 20,
+      "y": 380,
+      "rotation": 20,
+      "bounce": 0.9
+    },
+    {
+      "type": "rotater",
+      "x": 300,
+      "y": 150
+    }
+  ]
+}
