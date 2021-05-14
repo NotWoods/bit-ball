@@ -12,7 +12,12 @@
     "image": "goal.png",
     "density": 1.0,
     "friction": 0.3,
-    "bounce": 0.2
+    "bounce": 0.2,
+    "vertices": [
+      "-21 15  21 15  21 24  -21 24",
+      "-29 -24  -21 -24  -21 24  -29 24",
+      "21 -24  29 -24  29 24  21 24"
+    ]
   },
   "rotater": {
     "type": "dynamic",
@@ -22,6 +27,8 @@
     "angularDamping": 5,
     "motorSpeed": 50,
     "maxMotorTorque": 100000,
+    "width": 164,
+    "height": 11,
     "shape": [-82,-5, 82,-5, 82,6, -82,6]
   },
   "rotater_small": {
@@ -32,6 +39,8 @@
     "angularDamping": 5,
     "motorSpeed": 50,
     "maxMotorTorque": 100000,
+    "width": 72,
+    "height": 9,
     "shape": [-38,-5, 38,-5, 38,4, -38,4]
   },
   "touch": {
@@ -40,6 +49,8 @@
     "density": 1.0,
     "friction": 0.3,
     "bounce": 0.2,
+    "width": 72,
+    "height": 9,
     "shape": [-38,-5, 38,-5, 38,4, -38,4]
   },
   "trampoline": {
@@ -48,6 +59,8 @@
     "density": 1.0,
     "friction": 0.3,
     "bounce": 0.7,
+    "width": 72,
+    "height": 9,
     "shape": [-38,-5, 38,-5, 38,4, -38,4]
   }
 }

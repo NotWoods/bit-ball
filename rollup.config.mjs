@@ -1,5 +1,6 @@
 // @ts-check
 import commonjs from "@rollup/plugin-commonjs";
+import json from '@rollup/plugin-json';
 import resolve from "@rollup/plugin-node-resolve";
 import replace from "@rollup/plugin-replace";
 import typescript from "@rollup/plugin-typescript";
@@ -25,7 +26,7 @@ export default function makeConfig() {
       name: "BitBall",
       format: "iife",
       sourcemap: !isProduction,
-      intro: "var global = window;",
+      banner: "var global = window;",
     },
 
     plugins: [
@@ -43,6 +44,8 @@ export default function makeConfig() {
       resolve({
         extensions: [".ts", ".tsx"],
       }),
+
+      json(),
 
       //  We need to convert the Phaser 3 CJS modules into a format Rollup can use:
       commonjs({
