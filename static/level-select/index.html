@@ -13,14 +13,8 @@
       .level {
         height: 58px;
         width: 58px;
-        text-align: center;
         line-height: 58px;
-        color: rgb(237, 237, 237);
         background: url('levelbox.png');
-        border: 0;
-        cursor: pointer;
-        font-family: inherit;
-        font-size: 12px;
       }
       .level:hover, .level:focus {
         background: url('levelbox_over.png');
@@ -41,12 +35,12 @@
   <body>
     <template id="level">
       <li class="level__container">
-        <button type="button" class="level" disabled data-level=""></button>
+        <button type="button" class="neon-btn level" disabled data-level=""></button>
       </li>
     </template>
 
     <div class="container">
-      <ul id="levelSelect"></ul>
+      <ol id="levelSelect"></ol>
     </div>
 
     <script defer>
@@ -55,11 +49,11 @@
 
       const unlocked = 1;
 
-      for (let i = 1; i <= 20; i++) {
+      for (let i = 0; i < 20; i++) {
         const item = template.content.cloneNode(true);
         const button = item.querySelector('button');
         button.disabled = false;
-        button.textContent = i;
+        button.textContent = i + 1;
         button.dataset.level = i;
         list.append(item);
       }

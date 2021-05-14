@@ -1,68 +1,160 @@
 import "phaser";
-import { Level } from "./level";
-import * as platforms from './platforms.json';
+import { Coords, Level } from "./level";
+import * as platforms from "./platforms.json";
 
 const worldWidth = 320;
 const worldHeight = 480;
+const dropButton: HTMLButtonElement = document.querySelector(
+  'button[name="drop"]'
+);
 
 function levelFromUrl() {
-  return new URL(window.location.href).searchParams.get('level');
+  return new URL(window.location.href).searchParams.get("level");
 }
 
-export class Demo extends Phaser.Scene {
-  levelName: string;
+function physicsOptions(type: keyof typeof platforms) {
+  return {
+    label: type,
+    // @ts-expect-error density isn't on rotater yet
+    density: platforms[type].density,
+    restitution: platforms[type].bounce,
+    friction: platforms[type].friction,
+    isStatic: platforms[type].type === "static",
+    ignoreGravity: type !== "ball",
+  };
+}
 
-  constructor(level = levelFromUrl()) {
-    if (!level) {
-      throw new Error(`Missing level file`)
+declare global {
+  namespace Phaser.Physics.Matter.Matter {
+    namespace Body {
+      function create(options: { parts: any[] }): MatterJS.BodyType;
     }
 
+    namespace Bodies {
+      function rectangle(
+        x: number,
+        y: number,
+        width: number,
+        height: number
+      ): any;
+    }
+  }
+}
+
+export class BitBallLevel extends Phaser.Scene {
+  levelName: string;
+  ballsDropped = 0;
+
+  ball?: Phaser.Physics.Matter.Image;
+
+  constructor(level = levelFromUrl()) {
     super(`Level ${level}`);
+    if (!level) {
+      throw new Error(`Missing level file`);
+    }
     this.levelName = level;
   }
 
   preload() {
-    this.load.json('level', `level/${this.levelName}.json`);
+    this.load.json("level", `level/${this.levelName}.json`);
+    this.load.image("indicator", "assets/indicator.png");
     for (const [platform, { image }] of Object.entries(platforms)) {
-      if (platform !== 'default') {
+      if (platform !== "default") {
         this.load.image(platform, `assets/${image}`);
       }
     }
   }
 
   create() {
-    this.matter.world.setBounds(0, 0, worldWidth, worldHeight);
-    const level = this.cache.json.get('level') as Level;
+    // this.matter.world.setBounds(0, 0, worldWidth, worldHeight);
+    const level = this.cache.json.get("level") as Level;
 
-    // Ball
-    this.matter.add.circle(level.spawn.x, level.spawn.y, platforms.ball.radius, {
-      label: 'Ball',
-      density: platforms.ball.density,
-      restitution: platforms.ball.bounce,
-      friction: platforms.ball.friction,
-    });
-    // Goal
-    this.matter.add.fromVertices(level.goal.x, level.goal.y, platforms.goal.vertices, {
-      label: 'Goal',
-      density: platforms.goal.density,
-      restitution: platforms.goal.bounce,
-      friction: platforms.goal.friction,
-      isStatic: true,
-    })
+    this.add.image(level.spawn.x, 30, "indicator");
+    dropButton.onclick = () => this.buildBall(level.spawn);
+
+    this.buildGoal(level.goal);
+
+    const canDrag = this.matter.world.nextGroup();
 
     // Platforms
     for (const platform of level.platforms) {
-      const data = platforms[platform.type]
-      this.matter.add.rectangle(platform.x, platform.y, data.width, data.height, {
-        label: platform.type,
-        // @ts-expect-error density isn't on rotater yet
-        density: data.density,
-        restitution: data.bounce,
-        friction: data.friction,
-        isStatic: data.type === 'static',
-        ignoreGravity: true,
-      })
+      const data = platforms[platform.type];
+      const object = this.matter.add.image(
+        platform.x,
+        platform.y,
+        platform.type
+      );
+      object.setBody({
+        type: "rectangle",
+        width: data.width,
+        height: data.height,
+        ...physicsOptions(platform.type),
+      });
+      const body = object.body as MatterJS.BodyType;
+
+      switch (platform.type) {
+        case "touch": {
+          object.setCollisionGroup(canDrag);
+          // fall through
+        }
+        case "rotater":
+        case "rotater_small": {
+          const length = 0;
+          const stiffness = 0.5;
+          this.matter.add.worldConstraint(body, length, stiffness, {
+            pointA: { x: platform.x, y: platform.y },
+          });
+          break;
+        }
+      }
     }
+
+    // @ts-expect-error collisionFilter isn't typed
+    this.matter.add.mouseSpring({ collisionFilter: { group: canDrag } });
+  }
+
+  private buildBall(coords: Coords) {
+    this.ball?.destroy();
+
+    const body = this.matter.add.image(coords.x, coords.y, "ball");
+    body.setBody({
+      type: "circle",
+      radius: platforms.ball.radius,
+      ...physicsOptions("ball"),
+    });
+
+    this.ballsDropped++;
+    console.log(`Dropping ball #${this.ballsDropped}`);
+    this.ball = body;
+
+    return body;
+  }
+
+  private buildGoal(coords: Coords) {
+    const parts = platforms.goal.components.map((component) =>
+      Phaser.Physics.Matter.Matter.Bodies.rectangle(
+        component.x,
+        component.y,
+        component.width,
+        component.height
+      )
+    );
+    const compoundBody = Phaser.Physics.Matter.Matter.Body.create({
+      parts,
+    });
+
+    const goal = this.matter.add.image(0, 0, "goal");
+    goal.setExistingBody(compoundBody);
+    compoundBody.label = "Goal";
+    compoundBody.density = platforms.goal.density;
+    compoundBody.restitution = platforms.goal.bounce;
+    compoundBody.friction = platforms.goal.friction;
+    compoundBody.render.sprite.xOffset = -0.3;
+    goal.setStatic(true);
+    goal.setX(coords.x);
+    goal.setY(coords.y);
+
+    return goal;
   }
 }
 
@@ -77,7 +169,7 @@ const config: Phaser.Types.Core.GameConfig = {
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   physics: {
-    default: 'matter',
+    default: "matter",
     matter: {
       enableSleeping: true,
       debug: {
@@ -143,11 +235,11 @@ const config: Phaser.Types.Core.GameConfig = {
         anchorSize: 4,
 
         showConvexHulls: true,
-        hullColor: 0xd703d0
-      }
-    }
+        hullColor: 0xd703d0,
+      },
+    },
   },
-  scene: Demo,
+  scene: BitBallLevel,
 };
 
 export const game = new Phaser.Game(config);

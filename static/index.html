@@ -4,7 +4,22 @@
     <meta charset="utf-8">
     <link href="./base.css" rel="stylesheet">
     <script async defer src="game.js"></script>
+    <style>
+      .drop {
+        position: absolute;
+        bottom: 0;
+        height: 55px;
+        width: 55px;
+        background: url('assets/newball.png');
+      }
+      .drop:hover, .drop:focus {
+        background: url('assets/newball_over.png');
+      }
+    </style>
   </head>
   <body>
+    <button type="button" name="drop" class="neon-btn drop">
+      <span class="sr-only">Drop ball</span>
+    </button>
   </body>
 </html>
