@@ -1,0 +1,12 @@
+body {
+  font-family: 'Press Start 2P', 'Arcade Classic', sans-serif;
+  background-color: #000;
+  background-image: radial-gradient(#343434, #000);
+  color: white;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}

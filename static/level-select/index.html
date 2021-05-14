@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bit Ball</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="../base.css" rel="stylesheet">
+    <style>
+      .level__container {
+        display: block;
+      }
+      .level {
+        height: 58px;
+        width: 58px;
+        text-align: center;
+        line-height: 58px;
+        color: rgb(237, 237, 237);
+        background: url('levelbox.png');
+        border: 0;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+      }
+      .level:hover, .level:focus {
+        background: url('levelbox_over.png');
+      }
+      .level:disabled {
+        background: url('lockedlevel.png');
+        color: transparent;
+      }
+
+      #levelSelect {
+        display: grid;
+        grid-template-columns: repeat(5, 58px);
+        margin: auto;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <template id="level">
+      <li class="level__container">
+        <button type="button" class="level" disabled data-level=""></button>
+      </li>
+    </template>
+
+    <div class="container">
+      <ul id="levelSelect"></ul>
+    </div>
+
+    <script defer>
+      const template = document.getElementById('level');
+      const list = document.getElementById('levelSelect');
+
+      const unlocked = 1;
+
+      for (let i = 1; i <= 20; i++) {
+        const item = template.content.cloneNode(true);
+        const button = item.querySelector('button');
+        button.disabled = false;
+        button.textContent = i;
+        button.dataset.level = i;
+        list.append(item);
+      }
+    </script>
+  </body>
+</html>
